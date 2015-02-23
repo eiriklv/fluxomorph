@@ -16,15 +16,12 @@ function Store(definition, context) {
 };
 
 Store.prototype.setState = function(state) {
-  let assignee = {};
-  if (Array.isArray(this.state)) assignee = [];
   this.state = assign(this.state, state);
   this.emit(CHANGE_EVENT);
 };
 
 Store.prototype.replaceState = function(state) {
-  let assignee = {};
-  if (Array.isArray(this.state)) assignee = [];
+  let assignee = Array.isArray(this.state) ? [] : {};
   this.state = assign(assignee, state);
   this.emit(CHANGE_EVENT);
 };
