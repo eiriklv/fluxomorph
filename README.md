@@ -26,15 +26,15 @@ __Arguments__
 __Example__
 
 ```js
-var Flux = require('fluxomorph');
+const Flux = require('fluxomorph');
 
 // use the constructor directly
 
-var flux = Flux({...}); // use store and action definition objects { Stores: {...}, Actions: {...} }
+const flux = Flux({...}); // use store and action definition objects { Stores: {...}, Actions: {...} }
 
 // or call register-function on the instance
 
-var flux = Flux();
+const flux = Flux();
 
 flux.registerStore({...});
 flux.registerStores({...});
@@ -45,12 +45,12 @@ flux.registerActions({...});
 
 flux.addToContext({...});
 
-var Stores = flux.Stores;
-var Actions = flux.Actions;
-var context = flux.context;      // context.Stores, context.Actions...
+const Stores = flux.Stores;
+const Actions = flux.Actions;
+const context = flux.context;      // context.Stores, context.Actions...
 
 // dehydration / rehydration
 
-var appState = flux.dehydrate(); // (fetches state from all stores)
+let appState = flux.dehydrate(); // (fetches state from all stores)
 flux.rehydrate(appState);        // replaces all store state with the one in appState
 ```
