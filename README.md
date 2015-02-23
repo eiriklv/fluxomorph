@@ -20,8 +20,8 @@ Create a flux instance.
 __Arguments__
 
 * `options` - A string specification of what you want to fetch.
- * `Stores` - Store definitions
- * `Actions` - Store definitions
+ * `Stores` - Store definitions object
+ * `Actions` - Action definitions object
 
 __Example__
 
