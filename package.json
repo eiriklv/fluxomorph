@@ -1,0 +1,30 @@
+{
+  "name": "fluxomorph",
+  "version": "1.0.0",
+  "main": "./lib.js",
+  "description": "Minimal Isomorphic Flux Implementation",
+  "dependencies": {
+    "object-assign": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodeunit": "0.9.x"
+  },
+  "scripts": {
+    "test": "nodeunit test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/eiriklv/fluxomorph.git"
+  },
+  "keywords": [
+    "react",
+    "flux",
+    "isomorphic"
+  ],
+  "author": "Eirik Vullum <evullum@gmail.com> (http://www.vullum.io/)",
+  "bugs": {
+    "url": "https://github.com/eiriklv/fluxomorph/issues"
+  },
+  "homepage": "https://github.com/eiriklv/fluxomorph",
+  "license": "MIT"
+}
