@@ -19,6 +19,12 @@ const myFlux = Flux({
         console.log(context);
         context.Stores.myStore.setState(payload);
       };
+    },
+    myOtherAction: function(context) {
+      return function(payload, done) {
+        console.log(context);
+        context.Stores.myStore.replaceState(payload);
+      };
     }
   }
 });
@@ -40,6 +46,13 @@ let currentState = myFlux.Stores.myStore.state;
 console.log(currentState);
 
 myFlux.Actions.myAction({
-  hello: 'goodbye',
   age: 50
+});
+
+myFlux.Actions.myAction({
+  hello: 'goodbye'
+})
+
+myFlux.Actions.myOtherAction({
+  name: 'Joe'
 });

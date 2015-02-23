@@ -19,6 +19,13 @@ myFlux.registerAction('myAction', function(context) {
   };
 });
 
+myFlux.registerAction('myOtherAction', function(context) {
+  return function(payload, done) {
+    console.log(context);
+    context.Stores.myStore.replaceState(payload);
+  };
+});
+
 myFlux.addToContext('api', {
   signIn: function() {}
 });
@@ -36,6 +43,13 @@ let currentState = myFlux.Stores.myStore.state;
 console.log(currentState);
 
 myFlux.Actions.myAction({
-  hello: 'goodbye',
   age: 50
+});
+
+myFlux.Actions.myAction({
+  hello: 'goodbye'
+})
+
+myFlux.Actions.myOtherAction({
+  name: 'Joe'
 });
