@@ -44,7 +44,7 @@ Flux.prototype.registerActions = function(actionCreators) {
 
 Flux.prototype.dehydrate = function() {
   return Object.keys(this.Stores).reduce(function(appState, Store) {
-    appState[Store] = this.Stores[Store];
+    appState[Store] = this.Stores[Store].state;
     return appState;
   }, {});
 };

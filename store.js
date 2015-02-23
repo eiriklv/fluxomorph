@@ -21,8 +21,7 @@ Store.prototype.setState = function(state) {
 };
 
 Store.prototype.replaceState = function(state) {
-  let assignee = Array.isArray(this.state) ? [] : {};
-  this.state = assign(assignee, state);
+  this.state = assign(Array.isArray(this.state) ? [] : {}, state);
   this.emit(CHANGE_EVENT);
 };
 
