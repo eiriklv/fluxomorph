@@ -49,7 +49,7 @@ var Stores = flux.Stores;
 var Actions = flux.Actions;
 var context = flux.context;      // context.Stores, context.Actions...
 
-// dehydratation / rehydration
+// dehydration / rehydration
 
 var appState = flux.dehydrate(); // (fetches state from all stores)
 flux.rehydrate(appState);        // replaces all store state with the one in appState
