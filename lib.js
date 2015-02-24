@@ -44,14 +44,14 @@ Flux.prototype.registerActions = function(actionCreators) {
   }
 };
 
+Flux.prototype.registerSocketActor = function(socket, event, eventActor) {
+  socket.on(event, eventActor(this.context));
+};
+
 Flux.prototype.registerSocketActors = function(socket, eventActorDefinitions) {
   for (let event in eventActorDefinitions) {
     this.registerSocketActor(socket, event, eventActorDefinitions[event], this.context);
   }
-};
-
-Flux.prototype.registerSocketActor = function(socket, event, eventActor) {
-  socket.on(event, eventActor(this.context));
 };
 
 Flux.prototype.addToContext = function(name, obj) {
