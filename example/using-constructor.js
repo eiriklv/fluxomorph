@@ -1,6 +1,6 @@
 'use strict';
 
-const socket = new (require('events').EventEmitter)();
+const socket = new(require('events').EventEmitter)();
 const Flux = require('../lib');
 
 const myFlux = Flux({
@@ -11,33 +11,31 @@ const myFlux = Flux({
           hello: 'world',
           age: 28
         };
+      },
+      handlers: {
+        'MY_ACTION_EVENT': function(context, payload) {
+          this.setState(payload);
+        },
+        'MY_OTHER_ACTION_EVENT': function(context, payload) {
+          this.replaceState(payload);
+        }
       }
     }
   },
   Actions: {
-    myAction: function(context) {
-      return function(payload, done) {
-        console.log(context);
-        context.Stores.myStore.setState(payload);
-      };
+    myAction: function(context, payload, done) {
+      context.Dispatcher.emit('MY_ACTION_EVENT', payload);
     },
-    myOtherAction: function(context) {
-      return function(payload, done) {
-        console.log(context);
-        context.Stores.myStore.replaceState(payload);
-      };
+    myOtherAction: function(context, payload, done) {
+      context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
     }
   },
   Actors: {
-    'some-event': function(context) {
-      return function(payload) {
-        context.Actions.myAction(payload);
-      };
+    'some-socket-event': function(context, payload) {
+      context.Dispatcher.emit('MY_ACTION_EVENT', payload);
     },
-    'some-other-event': function(context) {
-      return function(payload) {
-        context.Actions.myOtherAction(payload);
-      };
+    'some-other-socket-event': function(context, payload) {
+      context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
     }
   },
   socket: socket
@@ -72,14 +70,14 @@ myFlux.Actions.myOtherAction({
 });
 
 setTimeout(function() {
-  socket.emit('some-event', {
+  socket.emit('some-socket-event', {
     waddoo: 'camoo',
     bing: 45
   });
 }, 2000);
 
 setTimeout(function() {
-  socket.emit('some-other-event', {
+  socket.emit('some-other-socket-event', {
     crap: 'hello',
     woop: 60
   });

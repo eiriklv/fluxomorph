@@ -13,6 +13,13 @@ function Store(definition, context) {
 
   this.context = context || {};
   this.state = definition.getInitialState() || {};
+
+  for (let handler in definition.handlers) {
+    context.Dispatcher.on(
+      handler,
+      definition.handlers[handler].bind(this, context)
+    );
+  }
 };
 
 Store.prototype.setState = function(state) {
