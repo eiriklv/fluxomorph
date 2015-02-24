@@ -35,7 +35,7 @@ Flux.prototype.registerStores = function(storeDefinitions) {
 };
 
 Flux.prototype.registerAction = function(name, actionCreator) {
-  this.Actions[name] = actionCreator(this.context);
+  this.Actions[name] = actionCreator.bind(null, this.context);
 };
 
 Flux.prototype.registerActions = function(actionCreators) {
@@ -45,12 +45,12 @@ Flux.prototype.registerActions = function(actionCreators) {
 };
 
 Flux.prototype.registerSocketActor = function(socket, event, eventActor) {
-  socket.on(event, eventActor(this.context));
+  socket.on(event, eventActor.bind(null, this.context));
 };
 
 Flux.prototype.registerSocketActors = function(socket, eventActorDefinitions) {
   for (let event in eventActorDefinitions) {
-    this.registerSocketActor(socket, event, eventActorDefinitions[event], this.context);
+    this.registerSocketActor(socket, event, eventActorDefinitions[event]);
   }
 };
 

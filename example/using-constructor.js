@@ -1,6 +1,6 @@
 'use strict';
 
-const socket = new (require('events').EventEmitter)();
+const socket = new(require('events').EventEmitter)();
 const Flux = require('../lib');
 
 const myFlux = Flux({
@@ -15,29 +15,19 @@ const myFlux = Flux({
     }
   },
   Actions: {
-    myAction: function(context) {
-      return function(payload, done) {
-        console.log(context);
-        context.Stores.myStore.setState(payload);
-      };
+    myAction: function(context, payload, done) {
+      context.Stores.myStore.setState(payload);
     },
-    myOtherAction: function(context) {
-      return function(payload, done) {
-        console.log(context);
-        context.Stores.myStore.replaceState(payload);
-      };
+    myOtherAction: function(context, payload, done) {
+      context.Stores.myStore.replaceState(payload);
     }
   },
   Actors: {
-    'some-event': function(context) {
-      return function(payload) {
-        context.Actions.myAction(payload);
-      };
+    'some-event': function(context, payload) {
+      context.Actions.myAction(payload);
     },
-    'some-other-event': function(context) {
-      return function(payload) {
-        context.Actions.myOtherAction(payload);
-      };
+    'some-other-event': function(context, payload) {
+      context.Actions.myOtherAction(payload);
     }
   },
   socket: socket

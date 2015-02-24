@@ -1,6 +1,6 @@
 'use strict';
 
-const socket = new (require('events').EventEmitter)();
+const socket = new(require('events').EventEmitter)();
 const Flux = require('../lib');
 const myFlux = Flux();
 
@@ -13,30 +13,20 @@ myFlux.registerStore('myStore', {
   }
 });
 
-myFlux.registerAction('myAction', function(context) {
-  return function(payload, done) {
-    console.log(context);
-    context.Stores.myStore.setState(payload);
-  };
+myFlux.registerAction('myAction', function(context, payload, done) {
+  context.Stores.myStore.setState(payload);
 });
 
-myFlux.registerAction('myOtherAction', function(context) {
-  return function(payload, done) {
-    console.log(context);
-    context.Stores.myStore.replaceState(payload);
-  };
+myFlux.registerAction('myOtherAction', function(context, payload, done) {
+  context.Stores.myStore.replaceState(payload);
 });
 
-myFlux.registerSocketActor(socket, 'some-event', function(context) {
-  return function(payload) {
-    context.Actions.myAction(payload);
-  };
+myFlux.registerSocketActor(socket, 'some-event', function(context, payload) {
+  context.Actions.myAction(payload);
 });
 
-myFlux.registerSocketActor(socket, 'some-other-event', function(context) {
-  return function(payload) {
-    context.Actions.myOtherAction(payload);
-  };
+myFlux.registerSocketActor(socket, 'some-other-event', function(context, payload) {
+  context.Actions.myOtherAction(payload);
 });
 
 myFlux.addToContext('api', {
