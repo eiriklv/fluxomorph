@@ -1,5 +1,6 @@
 'use strict';
 
+const socket = new (require('events').EventEmitter)();
 const Flux = require('../lib');
 
 const myFlux = Flux({
@@ -26,7 +27,20 @@ const myFlux = Flux({
         context.Stores.myStore.replaceState(payload);
       };
     }
-  }
+  },
+  Actors: {
+    'some-event': function(context) {
+      return function(payload) {
+        context.Actions.myAction(payload);
+      };
+    },
+    'some-other-event': function(context) {
+      return function(payload) {
+        context.Actions.myOtherAction(payload);
+      };
+    }
+  },
+  socket: socket
 });
 
 myFlux.addToContext('api', {
@@ -56,3 +70,17 @@ myFlux.Actions.myAction({
 myFlux.Actions.myOtherAction({
   name: 'Joe'
 });
+
+setTimeout(function() {
+  socket.emit('some-event', {
+    waddoo: 'camoo',
+    bing: 45
+  });
+}, 2000);
+
+setTimeout(function() {
+  socket.emit('some-other-event', {
+    crap: 'hello',
+    woop: 60
+  });
+}, 3000);
