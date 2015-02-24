@@ -20,19 +20,21 @@ function Flux(options) {
     this.registerStores(options.Stores);
   if (options.Actions)
     this.registerActions(options.Actions);
+  if (options.Actors && options.socket)
+    this.registerSocketActors(options.socket, options.Actors);
 }
 
 Flux.prototype.registerStore = function(name, storeDefinition) {
-  this.Stores[name] = Flux.createStoreWithContext(storeDefinition, this.context);
+  this.Stores[name] = Store(storeDefinition, this.context);
 };
 
 Flux.prototype.registerAction = function(name, actionCreator) {
-  this.Actions[name] = Flux.createActionWithContext(actionCreator, this.context);
+  this.Actions[name] = actionCreator(this.context);
 };
 
 Flux.prototype.registerStores = function(storeDefinitions) {
-  for (let definition in storeDefinitions) {
-    this.registerStore(definition, storeDefinitions[definition]);
+  for (let store in storeDefinitions) {
+    this.registerStore(store, storeDefinitions[store]);
   }
 };
 
@@ -59,12 +61,14 @@ Flux.prototype.addToContext = function(name, obj) {
   this.context[name] = obj;
 };
 
-Flux.createStoreWithContext = function(storeDefinition, context) {
-  return Store(storeDefinition, context);
+Flux.prototype.registerSocketActors = function(socket, eventActorDefinitions) {
+  for (let event in eventActorDefinitions) {
+    this.registerSocketActor(socket, event, eventActorDefinitions[event], this.context);
+  }
 };
 
-Flux.createActionWithContext = function(actionCreator, context) {
-  return actionCreator(context);
+Flux.prototype.registerSocketActor = function(socket, event, eventActor) {
+  socket.on(event, eventActor(this.context));
 };
 
 Flux.StateMixin = StateMixin;
