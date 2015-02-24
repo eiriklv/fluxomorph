@@ -30,11 +30,15 @@ myFlux.registerAction('myOtherAction', function(context, payload, done) {
 });
 
 myFlux.registerSocketActor(socket, 'some-event', function(context, payload) {
-  context.Dispatcher.emit('MY_ACTION_EVENT', payload);
+  context.Actions.myAction(payload);
+  // alternatively
+  // context.Dispatcher.emit('MY_ACTION_EVENT', payload);
 });
 
 myFlux.registerSocketActor(socket, 'some-other-event', function(context, payload) {
-  context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
+  context.Actions.myOtherAction(payload);
+  // alternatively
+  // context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
 });
 
 myFlux.addToContext('api', {

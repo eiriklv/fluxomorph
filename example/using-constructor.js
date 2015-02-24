@@ -32,10 +32,14 @@ const myFlux = Flux({
   },
   Actors: {
     'some-socket-event': function(context, payload) {
-      context.Dispatcher.emit('MY_ACTION_EVENT', payload);
+      context.Actions.myAction(payload);
+      // alternatively
+      // context.Dispatcher.emit('MY_ACTION_EVENT', payload);
     },
     'some-other-socket-event': function(context, payload) {
-      context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
+      context.Actions.myOtherAction(payload);
+      // alternatively
+      // context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
     }
   },
   socket: socket
