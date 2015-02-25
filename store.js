@@ -13,16 +13,19 @@ function Store(definition, context) {
 
   this.context = context || {};
   this.state = definition.getInitialState() || {};
-};
 
-Store.prototype.setState = function(state) {
-  this.state = assign(this.state, state);
-  this.emit(CHANGE_EVENT);
-};
+  this.setState = definition.setState ?
+    definition.setState.bind(this, this.emit.bind(this, CHANGE_EVENT)) :
+    function(state) {
+      this.state = assign(this.state, state);
+      this.emit(CHANGE_EVENT);
+    };
 
-Store.prototype.replaceState = function(state) {
-  this.state = assign(Array.isArray(this.state) ? [] : {}, state);
-  this.emit(CHANGE_EVENT);
+  this.replaceState = definition.replaceState ?
+    definition.replaceState.bind(this, this.emit.bind(this, CHANGE_EVENT)) :
+    function(state) {
+      this.state = assign(Array.isArray(this.state) ? [] : {}, state);
+      this.emit(CHANGE_EVENT);
+    };
 };
-
 module.exports = Store;
