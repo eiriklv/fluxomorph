@@ -27,5 +27,11 @@ function Store(definition, context) {
       this.state = assign(Array.isArray(this.state) ? [] : {}, state);
       this.emit(CHANGE_EVENT);
     };
+
+  this.getState = definition.getState ?
+    definition.getState.bind(this, this.emit.bind(this, CHANGE_EVENT)) :
+    function() {
+      return assign(Array.isArray(this.state) ? [] : {}, this.state);
+    };
 };
 module.exports = Store;
