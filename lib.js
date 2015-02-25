@@ -57,20 +57,26 @@ Flux.prototype.registerSocketActors = function(socket, eventActorDefinitions) {
   }
 };
 
+Flux.prototype.getContext = function() {
+  return this.context;
+};
+
 Flux.prototype.addToContext = function(name, obj) {
   this.context[name] = obj;
 };
 
 Flux.prototype.dehydrate = function() {
+  let self = this;
+
   return Object.keys(this.Stores).reduce(function(appState, Store) {
-    appState[Store] = this.Stores[Store].getState();
+    appState[Store] = self.Stores[Store].getState();
     return appState;
   }, {});
 };
 
 Flux.prototype.rehydrate = function(appState) {
   for (let Store in this.Stores) {
-    this.Stores[Store].replaceState(appState[Store] || {})
+    this.Stores[Store].replaceState(appState[Store])
   }
 };
 
