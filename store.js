@@ -14,21 +14,21 @@ function Store(definition, context) {
   this.context = context || {};
   this.state = definition.getInitialState() || {};
 
-  this.setState = definition.setState ?
+  this.setState = typeof definition.setState === 'function' ?
     definition.setState.bind(this, this.emit.bind(this, CHANGE_EVENT)) :
     function(state) {
       this.state = assign(this.state, state);
       this.emit(CHANGE_EVENT);
     };
 
-  this.replaceState = definition.replaceState ?
+  this.replaceState = typeof definition.replaceState === 'function' ?
     definition.replaceState.bind(this, this.emit.bind(this, CHANGE_EVENT)) :
     function(state) {
       this.state = assign(Array.isArray(this.state) ? [] : {}, state);
       this.emit(CHANGE_EVENT);
     };
 
-  this.getState = definition.getState ?
+  this.getState = typeof definition.getState === 'function' ?
     definition.getState.bind(this, this.emit.bind(this, CHANGE_EVENT)) :
     function() {
       return assign(Array.isArray(this.state) ? [] : {}, this.state);
