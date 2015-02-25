@@ -98,3 +98,7 @@ setTimeout(function() {
     woop: 60
   });
 }, 3000);
+
+setTimeout(function() {
+  console.log(myFlux.dehydrate());
+}, 5000);
