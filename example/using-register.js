@@ -51,7 +51,7 @@ myFlux.Actions.myAction({
 
 myFlux.Actions.myAction({
   hello: 'goodbye'
-})
+});
 
 myFlux.Actions.myOtherAction({
   name: 'Joe'
