@@ -1,8 +1,8 @@
 'use strict';
 
-const assign = require('object-assign');
-const socket = new(require('events').EventEmitter)();
-const Flux = require('../lib');
+var assign = require('object-assign');
+var socket = new(require('events').EventEmitter)();
+var Flux = require('../lib');
 
 var filledStoreDefinitions = {
   myStore: {
@@ -36,21 +36,21 @@ var emptyStoreDefinitions = {
   }
 };
 
-const myFlux = Flux({
+var myFlux = Flux({
   Stores: filledStoreDefinitions
 });
 
-let filledAppState = myFlux.dehydrate();
+var filledAppState = myFlux.dehydrate();
 console.log(filledAppState);
 
-const myOtherFlux = Flux({
+var myOtherFlux = Flux({
   Stores: emptyStoreDefinitions
 });
 
-let emptyAppState = myOtherFlux.dehydrate();
+var emptyAppState = myOtherFlux.dehydrate();
 console.log(emptyAppState);
 
 myOtherFlux.rehydrate(filledAppState);
 
-let rehydratedAppState = myOtherFlux.dehydrate();
+var rehydratedAppState = myOtherFlux.dehydrate();
 console.log(rehydratedAppState);

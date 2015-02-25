@@ -1,23 +1,23 @@
 'use strict';
 
-const CHANGE_EVENT = require('./constants').CHANGE_EVENT;
+var CHANGE_EVENT = require('./constants').CHANGE_EVENT;
 
 module.exports = function(fluxPropName) {
   return {
     __updateState: function(Store) {
-      let state = {};
+      var state = {};
       state[Store] = this.props[fluxPropName].Stores[Store].state;
       this.setState(state);
     },
 
     componentWillMount: function() {
-      for (let Store in this.props[fluxPropName].Stores) {
+      for (var Store in this.props[fluxPropName].Stores) {
         this.props[fluxPropName].Stores[Store].on(CHANGE_EVENT, this.__updateState.bind(this, Store));
       }
     },
 
     componentWillUnmount: function() {
-      for (let Store in this.props.Stores) {
+      for (var Store in this.props.Stores) {
         this.props[fluxPropName].Stores[Store].removeListener(CHANGE_EVENT, this.__updateState);
       }
     },

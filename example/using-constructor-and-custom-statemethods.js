@@ -1,10 +1,10 @@
 'use strict';
 
-const assign = require('object-assign');
-const socket = new(require('events').EventEmitter)();
-const Flux = require('../lib');
+var assign = require('object-assign');
+var socket = new(require('events').EventEmitter)();
+var Flux = require('../lib');
 
-const myFlux = Flux({
+var myFlux = Flux({
   Stores: {
     myStore: {
       getInitialState: function() {
@@ -70,7 +70,7 @@ myFlux.Stores.myStore.on('change', function() {
   console.log(myFlux.Stores.myStore.getState());
 });
 
-let currentState = myFlux.Stores.myStore.getState();
+var currentState = myFlux.Stores.myStore.getState();
 console.log(currentState);
 
 myFlux.Actions.myAction({

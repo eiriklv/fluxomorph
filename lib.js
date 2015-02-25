@@ -1,9 +1,9 @@
 'use strict';
 
-const assign = require('object-assign');
-const Store = require('./store');
-const StateMixin = require('./state-mixin');
-const eventEmitter = require('events').EventEmitter;
+var assign = require('object-assign');
+var Store = require('./store');
+var StateMixin = require('./state-mixin');
+var eventEmitter = require('events').EventEmitter;
 
 function Flux(options) {
   if (!(this instanceof Flux))
@@ -32,7 +32,7 @@ Flux.prototype.registerStore = function(name, storeDefinition) {
 };
 
 Flux.prototype.registerStores = function(storeDefinitions) {
-  for (let store in storeDefinitions) {
+  for (var store in storeDefinitions) {
     this.registerStore(store, storeDefinitions[store]);
   }
 };
@@ -42,7 +42,7 @@ Flux.prototype.registerAction = function(name, actionCreator) {
 };
 
 Flux.prototype.registerActions = function(actionCreators) {
-  for (let creator in actionCreators) {
+  for (var creator in actionCreators) {
     this.registerAction(creator, actionCreators[creator]);
   }
 };
@@ -52,7 +52,7 @@ Flux.prototype.registerSocketActor = function(socket, event, eventActor) {
 };
 
 Flux.prototype.registerSocketActors = function(socket, eventActorDefinitions) {
-  for (let event in eventActorDefinitions) {
+  for (var event in eventActorDefinitions) {
     this.registerSocketActor(socket, event, eventActorDefinitions[event]);
   }
 };
@@ -73,7 +73,7 @@ Flux.prototype.dehydrate = function() {
 };
 
 Flux.prototype.rehydrate = function(appState) {
-  for (let Store in this.Stores) {
+  for (var Store in this.Stores) {
     this.Stores[Store].replaceState(appState[Store])
   }
 };

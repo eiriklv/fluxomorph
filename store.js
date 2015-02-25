@@ -1,9 +1,9 @@
 'use strict';
 
-const util = require('util');
-const assign = require('object-assign');
-const eventEmitter = require('events').EventEmitter;
-const CHANGE_EVENT = require('./constants').CHANGE_EVENT;
+var util = require('util');
+var assign = require('object-assign');
+var eventEmitter = require('events').EventEmitter;
+var CHANGE_EVENT = require('./constants').CHANGE_EVENT;
 
 util.inherits(Store, eventEmitter);
 
@@ -34,7 +34,7 @@ function Store(definition, context) {
       return assign(Array.isArray(this.state) ? [] : {}, this.state);
     };
 
-  for (let handler in definition.handlers) {
+  for (var handler in definition.handlers) {
     context.Dispatcher.on(
       handler,
       definition.handlers[handler].bind(this, context)
