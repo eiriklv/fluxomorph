@@ -10,23 +10,35 @@ myFlux.registerStore('myStore', {
       hello: 'world',
       age: 28
     };
+  },
+  handlers: {
+    'MY_ACTION_EVENT': function(context, payload) {
+      this.setState(payload);
+    },
+    'MY_OTHER_ACTION_EVENT': function(context, payload) {
+      this.replaceState(payload);
+    }
   }
 });
 
 myFlux.registerAction('myAction', function(context, payload, done) {
-  context.Stores.myStore.setState(payload);
+  context.Dispatcher.emit('MY_ACTION_EVENT', payload);
 });
 
 myFlux.registerAction('myOtherAction', function(context, payload, done) {
-  context.Stores.myStore.replaceState(payload);
+  context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
 });
 
 myFlux.registerSocketActor(socket, 'some-event', function(context, payload) {
   context.Actions.myAction(payload);
+  // alternatively
+  // context.Dispatcher.emit('MY_ACTION_EVENT', payload);
 });
 
 myFlux.registerSocketActor(socket, 'some-other-event', function(context, payload) {
   context.Actions.myOtherAction(payload);
+  // alternatively
+  // context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
 });
 
 myFlux.addToContext('api', {
@@ -51,7 +63,7 @@ myFlux.Actions.myAction({
 
 myFlux.Actions.myAction({
   hello: 'goodbye'
-})
+});
 
 myFlux.Actions.myOtherAction({
   name: 'Joe'

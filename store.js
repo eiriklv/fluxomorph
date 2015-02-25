@@ -27,5 +27,12 @@ function Store(definition, context) {
       this.state = assign(Array.isArray(this.state) ? [] : {}, state);
       this.emit(CHANGE_EVENT);
     };
+
+  for (let handler in definition.handlers) {
+    context.Dispatcher.on(
+      handler,
+      definition.handlers[handler].bind(this, context)
+    );
+  }
 };
 module.exports = Store;

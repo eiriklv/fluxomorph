@@ -13,30 +13,42 @@ const myFlux = Flux({
           age: 28
         };
       },
-      setState: function(emitUpdate, nextState) {
-        this.state = assign(this.state, nextState);
+      setState: function(emitUpdate, newState) {
+        this.state = assign(this.state, newState);
         emitUpdate();
       },
-      replaceState: function(emitUpdate, nextState) {
-        this.state = assign({}, nextState);
+      replaceState: function(emitUpdate, newState) {
+        this.state = assign({}, newState);
         emitUpdate();
+      },
+      handlers: {
+        'MY_ACTION_EVENT': function(context, payload) {
+          this.setState(payload);
+        },
+        'MY_OTHER_ACTION_EVENT': function(context, payload) {
+          this.replaceState(payload);
+        }
       }
     }
   },
   Actions: {
     myAction: function(context, payload, done) {
-      context.Stores.myStore.setState(payload);
+      context.Dispatcher.emit('MY_ACTION_EVENT', payload);
     },
     myOtherAction: function(context, payload, done) {
-      context.Stores.myStore.replaceState(payload);
+      context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
     }
   },
   Actors: {
-    'some-event': function(context, payload) {
+    'some-socket-event': function(context, payload) {
       context.Actions.myAction(payload);
+      // alternatively
+      // context.Dispatcher.emit('MY_ACTION_EVENT', payload);
     },
-    'some-other-event': function(context, payload) {
+    'some-other-socket-event': function(context, payload) {
       context.Actions.myOtherAction(payload);
+      // alternatively
+      // context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
     }
   },
   socket: socket
@@ -71,14 +83,14 @@ myFlux.Actions.myOtherAction({
 });
 
 setTimeout(function() {
-  socket.emit('some-event', {
+  socket.emit('some-socket-event', {
     waddoo: 'camoo',
     bing: 45
   });
 }, 2000);
 
 setTimeout(function() {
-  socket.emit('some-other-event', {
+  socket.emit('some-other-socket-event', {
     crap: 'hello',
     woop: 60
   });

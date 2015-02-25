@@ -3,6 +3,7 @@
 const assign = require('object-assign');
 const Store = require('./store');
 const StateMixin = require('./state-mixin');
+const eventEmitter = require('events').EventEmitter;
 
 function Flux(options) {
   if (!(this instanceof Flux))
@@ -11,10 +12,12 @@ function Flux(options) {
   options = options || {};
   this.Stores = {};
   this.Actions = {};
+  this.Dispatcher = new eventEmitter();
 
   this.context = {};
   this.context.Stores = this.Stores;
   this.context.Actions = this.Actions;
+  this.context.Dispatcher = this.Dispatcher;
 
   if (options.Stores)
     this.registerStores(options.Stores);
