@@ -26,7 +26,7 @@ module.exports = function(fluxPropName) {
       return Object.keys(this.props[fluxPropName].Stores).reduce(function(initialState, Store) {
         initialState[Store] = this.props[fluxPropName].Stores[Store];
         return initialState;
-      }, {});
+      }.bind(this), {});
     }
   }
 };

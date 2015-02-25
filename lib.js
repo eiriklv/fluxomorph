@@ -66,12 +66,10 @@ Flux.prototype.addToContext = function(name, obj) {
 };
 
 Flux.prototype.dehydrate = function() {
-  let self = this;
-
   return Object.keys(this.Stores).reduce(function(appState, Store) {
-    appState[Store] = self.Stores[Store].getState();
+    appState[Store] = this.Stores[Store].getState();
     return appState;
-  }, {});
+  }.bind(this), {});
 };
 
 Flux.prototype.rehydrate = function(appState) {
