@@ -18,6 +18,7 @@ function Flux(options) {
   this.context.Stores = this.Stores;
   this.context.Actions = this.Actions;
   this.context.Dispatcher = this.Dispatcher;
+  this.context.shouldUpdate = true;
 
   if (options.Stores)
     this.registerStores(options.Stores);
@@ -76,6 +77,10 @@ Flux.prototype.rehydrate = function(appState) {
   for (var Store in this.Stores) {
     this.Stores[Store].replaceState(appState[Store])
   }
+};
+
+Flux.prototype.enableUpdates = function(cond) {
+  this.context.shouldUpdate = !!cond;
 };
 
 Flux.StateMixin = StateMixin;
