@@ -6,7 +6,7 @@ module.exports = function(fluxPropName) {
   return {
     __updateState: function(Store) {
       var state = {};
-      state[Store] = this.props[fluxPropName].Stores[Store].state;
+      state[Store] = this.props[fluxPropName].Stores[Store].getState();
       this.setState(state);
     },
 
@@ -24,7 +24,7 @@ module.exports = function(fluxPropName) {
 
     getInitialState: function() {
       return Object.keys(this.props[fluxPropName].Stores).reduce(function(initialState, Store) {
-        initialState[Store] = this.props[fluxPropName].Stores[Store];
+        initialState[Store] = this.props[fluxPropName].Stores[Store].getState();
         return initialState;
       }.bind(this), {});
     }
