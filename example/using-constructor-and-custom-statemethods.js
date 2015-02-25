@@ -21,6 +21,9 @@ const myFlux = Flux({
         this.state = assign({}, newState);
         emitUpdate();
       },
+      getState: function() {
+        return assign(Array.isArray(this.state) ? [] : {}, this.state);
+      },
       handlers: {
         'MY_ACTION_EVENT': function(context, payload) {
           this.setState(payload);
@@ -64,10 +67,10 @@ myFlux.addToContext('router', {
 
 myFlux.Stores.myStore.on('change', function() {
   console.log('updated!');
-  console.log(myFlux.Stores.myStore.state);
+  console.log(myFlux.Stores.myStore.getState());
 });
 
-let currentState = myFlux.Stores.myStore.state;
+let currentState = myFlux.Stores.myStore.getState();
 console.log(currentState);
 
 myFlux.Actions.myAction({

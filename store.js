@@ -28,6 +28,12 @@ function Store(definition, context) {
       this.emit(CHANGE_EVENT);
     };
 
+  this.getState = definition.getState ?
+    definition.getState.bind(this, this.emit.bind(this, CHANGE_EVENT)) :
+    function() {
+      return assign(Array.isArray(this.state) ? [] : {}, this.state);
+    };
+
   for (let handler in definition.handlers) {
     context.Dispatcher.on(
       handler,

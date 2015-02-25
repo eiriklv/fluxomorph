@@ -55,10 +55,10 @@ myFlux.addToContext('router', {
 
 myFlux.Stores.myStore.on('change', function() {
   console.log('updated!');
-  console.log(myFlux.Stores.myStore.state);
+  console.log(myFlux.Stores.myStore.getState());
 });
 
-let currentState = myFlux.Stores.myStore.state;
+let currentState = myFlux.Stores.myStore.getState();
 console.log(currentState);
 
 myFlux.Actions.myAction({
