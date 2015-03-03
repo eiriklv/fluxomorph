@@ -286,3 +286,85 @@ myFlux.registerSocketActor(socket, 'some-other-event', function(context, payload
   // context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
 });
 ```
+
+* Getting the context of your flux instance (which you might want to pass to another mechanism - e.g your router)
+
+```javascript
+var context = myFlux.getContext();
+
+// now you have access to context.Stores, context.Actions and context.Dispatcher
+```
+
+* React state mixin (example using react-router and child context). 
+
+```javascript
+'use strict';
+
+var React = require('react');
+var Router = require('react-router');
+var RouteHandler = Router.RouteHandler;
+var Flux = require('fluxomorph');
+
+var storeDefinitions = require('../store-defs');
+var actionDefinitions = require('../action-defs');
+
+var App = React.createClass({
+  mixins: [Flux.StateMixin('flux')],
+
+  childContextTypes: {
+    flux: React.PropTypes.object.isRequired,
+    routerState: React.PropTypes.object.isRequired
+  },
+
+  propTypes: {
+    flux: React.PropTypes.any,
+    routerState: React.PropTypes.object
+  },
+
+  getChildContext: function() {
+    return {
+      flux: this.props.flux,
+      routerState: this.props.routerState
+    };
+  },
+
+  render: function() {
+    return (
+      <RouteHandler
+        state={this.state}
+      />
+    );
+  }
+});
+
+var router = Router.create({...});
+
+var flux = Flux({
+  Stores: storeDefinitions,
+  Actions: actionDefinitions
+})
+
+flux.addToContext('router', router);
+
+router.run(function(Handler, routerState) {
+  React.render(
+    <App
+      flux={flux.getContext()}
+      routerState={routerState}
+    />,
+    document.body
+  );
+});
+
+/*
+this.state in the react component will have the form:
+
+{
+  Stores: {
+    myStore: {...},
+    myOtherStore: {...}
+  }
+}
+
+ */
+```
