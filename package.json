@@ -26,5 +26,8 @@
     "url": "https://github.com/eiriklv/fluxomorph/issues"
   },
   "homepage": "https://github.com/eiriklv/fluxomorph",
-  "license": "MIT"
+  "license": "MIT",
+  "directories": {
+    "example": "example"
+  }
 }
