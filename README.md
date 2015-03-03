@@ -7,50 +7,282 @@ Fluxomorph
 [![devDependency Status](https://david-dm.org/eiriklv/fluxomorph/dev-status.svg)](https://david-dm.org/eiriklv/fluxomorph#info=devDependencies)
 
 #### Introduction:
-Minimal Isomorphic Flux Implementation.
+Minimal Isomorphic Flux Implementation. Still WIP.
 
-WIP
+#### Install:
+`npm install fluxomorph --save`
 
----------------------------------------
+#### Usage:
 
-### constructor()
+* Create a flux instance with actions and stores using only the constructor.
 
-Create a flux instance.
+```javascript
+var Flux = require('fluxomorph');
 
-__Arguments__
+var myFlux = Flux({
+  Stores: {
+    myStore: {
+      getInitialState: function() {
+        return {
+          hello: 'world',
+          age: 28
+        };
+      },
+      handlers: {
+        'MY_ACTION_EVENT': function(context, payload) {
+          this.setState(payload);
+        },
+        'MY_OTHER_ACTION_EVENT': function(context, payload) {
+          this.replaceState(payload);
+        }
+      }
+    }
+  },
+  Actions: {
+    myAction: function(context, payload, done) {
+      context.Dispatcher.emit('MY_ACTION_EVENT', payload);
+    },
+    myOtherAction: function(context, payload, done) {
+      context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
+    }
+  }
+});
+```
 
-* `options`
- * `Stores` - Store definitions object
- * `Actions` - Action definitions object
+* Create a flux instance with actions and stores using the constructor and `register` methods.
 
-__Example__
+```javascript
+var Flux = require('fluxomorph');
 
-```js
-const Flux = require('fluxomorph');
+var myFlux = Flux();
 
-// use the constructor directly
+myFlux.registerStore('myStore', {
+  getInitialState: function() {
+    return {
+      hello: 'world',
+      age: 28
+    };
+  },
+  handlers: {
+    'MY_ACTION_EVENT': function(context, payload) {
+      this.setState(payload);
+    },
+    'MY_OTHER_ACTION_EVENT': function(context, payload) {
+      this.replaceState(payload);
+    }
+  }
+});
 
-const flux = Flux({...}); // use store and action definition objects { Stores: {...}, Actions: {...} }
+myFlux.registerAction('myAction', function(context, payload, done) {
+  context.Dispatcher.emit('MY_ACTION_EVENT', payload);
+});
 
-// or call register-function on the instance
+myFlux.registerAction('myOtherAction', function(context, payload, done) {
+  context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
+});
+```
 
-const flux = Flux();
+* Using custom `setState`, `replaceState` and `getState` methods for stores. This enables you to use your favorite immutable data structures.
 
-flux.registerStore({...});
-flux.registerStores({...});
-flux.registerAction({...});
-flux.registerActions({...});
+```javascript
+var Flux = require('fluxomorph');
 
-// add stuff to the context
+var myFlux = Flux();
 
-flux.addToContext({...});
+myFlux.registerStore('myStore', {
+  getInitialState: function() {
+    return {
+      hello: 'world',
+      age: 28
+    };
+  },
+  setState: function(emitUpdate, newState) {
+    this.state = assign(this.state, newState);
+    emitUpdate();
+  },
+  replaceState: function(emitUpdate, newState) {
+    this.state = assign({}, newState);
+    emitUpdate();
+  },
+  getState: function() {
+    return assign(Array.isArray(this.state) ? [] : {}, this.state);
+  },
+  handlers: {
+    'MY_ACTION_EVENT': function(context, payload) {
+      this.setState(payload);
+    },
+    'MY_OTHER_ACTION_EVENT': function(context, payload) {
+      this.replaceState(payload);
+    }
+  }
+});
+```
 
-const Stores = flux.Stores;
-const Actions = flux.Actions;
-const context = flux.context;      // context.Stores, context.Actions...
+* Adding stuff to the context, making it available to the actions.
 
-// dehydration / rehydration
+```javascript
+var Flux = require('fluxomorph');
 
-let appState = flux.dehydrate(); // (fetches state from all stores)
-flux.rehydrate(appState);        // replaces all store state with the one in appState
+var myFlux = Flux();
+
+myFlux.registerStore('myStore', {
+  getInitialState: function() {
+    return {
+      hello: 'world',
+      age: 28
+    };
+  },
+  setState: function(emitUpdate, newState) {
+    this.state = assign(this.state, newState);
+    emitUpdate();
+  },
+  replaceState: function(emitUpdate, newState) {
+    this.state = assign({}, newState);
+    emitUpdate();
+  },
+  getState: function() {
+    return assign(Array.isArray(this.state) ? [] : {}, this.state);
+  },
+  handlers: {
+    'MY_ACTION_EVENT': function(context, payload) {
+      this.setState(payload);
+    },
+    'MY_OTHER_ACTION_EVENT': function(context, payload) {
+      this.replaceState(payload);
+    }
+  }
+});
+
+myFlux.addToContext('api', {
+  signIn: function() {}
+});
+
+myFlux.addToContext('router', {
+  redirect: function() {}
+});
+
+// inside action handlers you now have context.api and context.router
+```
+
+* Listening for updates in stores
+
+```javascript
+myFlux.Stores.myStore.on('change', function() {
+  console.log('updated state:', myFlux.Stores.myStore.getState());
+});
+
+var currentState = myFlux.Stores.myStore.getState();
+console.log('initial state:', currentState);
+
+myFlux.Actions.myAction({
+  age: 50
+});
+```
+
+* Dehydration / rehydration (pull all state out of the stores in your instance for serialization / initialization)
+
+```javascript
+var Flux = require('fluxomorph');
+
+var filledStoreDefinitions = {
+  myStore: {
+    getInitialState: function() {
+      return {
+        hello: 'world',
+        age: 28
+      };
+    }
+  },
+  myOtherStore: {
+    getInitialState: function() {
+      return [
+        'hello',
+        'goodbye'
+      ];
+    }
+  }
+};
+
+var emptyStoreDefinitions = {
+  myStore: {
+    getInitialState: function() {
+      return {};
+    }
+  },
+  myOtherStore: {
+    getInitialState: function() {
+      return [];
+    }
+  }
+};
+
+var myFlux = Flux({
+  Stores: filledStoreDefinitions
+});
+
+var filledAppState = myFlux.dehydrate();
+console.log(filledAppState);
+/*
+{
+  myStore: {
+    hello: 'world',
+    age: 28
+  },
+  myOtherStore: [
+    'hello',
+    goodbye
+  ]
+}
+*/
+
+var myOtherFlux = Flux({
+  Stores: emptyStoreDefinitions
+});
+
+var emptyAppState = myOtherFlux.dehydrate();
+console.log(emptyAppState);
+/*
+{
+  myStore: {},
+  myOtherStore: []
+}
+*/
+
+myOtherFlux.rehydrate(filledAppState);
+
+var rehydratedAppState = myOtherFlux.dehydrate();
+console.log(rehydratedAppState);
+/*
+{
+  myStore: {
+    hello: 'world',
+    age: 28
+  },
+  myOtherStore: [
+    'hello',
+    goodbye
+  ]
+}
+*/
+```
+
+* Attach handlers to eventEmitters/sockets (wip - there is still some work to be done here to have proper cleanup)
+
+```javascript
+// socket in this case might be a socket.io/ws connection or just an any event emitter
+// following the eventEmitter.on('eventName', function handler() {...}) pattern
+
+myFlux.registerSocketActor(socket, 'some-event', function(context, payload) {
+  // call an action
+  context.Actions.myAction(payload);
+  // or alternatively dispatch a message to a store directly
+  // context.Dispatcher.emit('MY_ACTION_EVENT', payload);
+});
+
+myFlux.registerSocketActor(socket, 'some-other-event', function(context, payload) {
+  // call an action
+  context.Actions.myOtherAction(payload);
+  // or alternatively dispatch a message to a store directly
+  // context.Dispatcher.emit('MY_OTHER_ACTION_EVENT', payload);
+});
 ```
