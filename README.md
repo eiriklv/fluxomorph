@@ -348,7 +348,7 @@ flux.addToContext('router', router);
 
 router.run(function(Handler, routerState) {
   React.render(
-    <App
+    <Handler
       flux={flux.getContext()}
       routerState={routerState}
     />,
