@@ -7,7 +7,7 @@ Fluxomorph
 [![devDependency Status](https://david-dm.org/eiriklv/fluxomorph/dev-status.svg)](https://david-dm.org/eiriklv/fluxomorph#info=devDependencies)
 
 #### Introduction:
-Minimal Isomorphic Flux Implementation. Still WIP. Made both out of need and for educational purposes.
+Minimal Isomorphic Flux Implementation. Still WIP. Made both out of need and for educational purposes. Full example of usage can be seen in [fluxity-starter-auth](https://github.com/eiriklv/fluxity-starter-auth).
 
 #### Install:
 `npm install fluxomorph --save`
