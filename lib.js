@@ -33,9 +33,9 @@ Flux.prototype.registerStore = function(name, storeDefinition) {
 };
 
 Flux.prototype.registerStores = function(storeDefinitions) {
-  for (var store in storeDefinitions) {
+  Object.keys(storeDefinitions).forEach(function(store) {
     this.registerStore(store, storeDefinitions[store]);
-  }
+  }.bind(this));
 };
 
 Flux.prototype.registerAction = function(name, actionCreator) {
@@ -43,9 +43,9 @@ Flux.prototype.registerAction = function(name, actionCreator) {
 };
 
 Flux.prototype.registerActions = function(actionCreators) {
-  for (var creator in actionCreators) {
+  Object.keys(actionCreators).forEach(function(creator) {
     this.registerAction(creator, actionCreators[creator]);
-  }
+  }.bind(this));
 };
 
 Flux.prototype.registerSocketActor = function(socket, event, eventActor) {
@@ -53,9 +53,9 @@ Flux.prototype.registerSocketActor = function(socket, event, eventActor) {
 };
 
 Flux.prototype.registerSocketActors = function(socket, eventActorDefinitions) {
-  for (var event in eventActorDefinitions) {
+  Object.keys(eventActorDefinitions).forEach(function(event) {
     this.registerSocketActor(socket, event, eventActorDefinitions[event]);
-  }
+  }.bind(this));
 };
 
 Flux.prototype.getContext = function() {
@@ -74,9 +74,9 @@ Flux.prototype.dehydrate = function() {
 };
 
 Flux.prototype.rehydrate = function(appState) {
-  for (var Store in this.Stores) {
+  Object.keys(this.Stores).forEach(function(Store) {
     this.Stores[Store].replaceState(appState[Store])
-  }
+  }.bind(this));
 };
 
 Flux.prototype.enableUpdates = function(cond) {

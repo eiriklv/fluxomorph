@@ -34,11 +34,11 @@ function Store(definition, context) {
       return assign(Array.isArray(this.state) ? [] : {}, this.state);
     };
 
-  for (var handler in definition.handlers) {
+  Object.keys(definition.handlers || {}).forEach(function(handler) {
     context.Dispatcher.on(
       handler,
       definition.handlers[handler].bind(this, context)
     );
-  }
+  }.bind(this));
 };
 module.exports = Store;
